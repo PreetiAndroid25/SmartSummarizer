@@ -1,0 +1,26 @@
+name: AndroidBuild
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Build debug apk
+        run: ./gradlew assembleDebug
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: martSummarizer.apk
+          path: app/build/outputs/apk/debug
